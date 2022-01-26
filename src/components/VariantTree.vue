@@ -1,7 +1,7 @@
 <template>
   <div v-for="(variants, genNum) in successful_build_variants" class="col-12" :style="{height: (genNum === 0 ? 50 : 200)+'px'}">
     <div style="text-align: left; margin-left: 100px;" v-if="0 < genNum">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" :width="100*successful_build_variants[genNum-1]" height="150">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="150">
         <template v-for="(variant) in variants.filter((v) => v.is_copied == true)">
           <line v-if="show_suspicious" class="line"  :x1="50+successful_build_variants[genNum-1].find((v) => v.id === variant.id).index*100" y1="0" :x2="50+variant.index*100" y2="150" stroke="black" opacity="0.5"/>
           <line v-else class="line"  :x1="50+successful_build_variants[genNum-1].find((v) => v.id === variant.id).index*100" y1="0" :x2="50+variant.index*100" y2="150" stroke="black"/>
@@ -113,7 +113,7 @@ export default {
             var max_suspicious_value = 0.0;
             for(let k=variant.operation.appendBase.lineNumberRange.start;k<=variant.operation.appendBase.lineNumberRange.end;k++) {
               max_suspicious_value = max_suspicious_value < suspicious_values[k] ? suspicious_values[k] : max_suspicious_value;
-              console.log(String(variant.id)+': '+String(k) +','+String(suspicious_values[k]));
+              // console.log(String(variant.id)+': '+String(k) +','+String(suspicious_values[k]));
             }
             this.successful_build_variants[i][j]['max_suspicious_value'] = max_suspicious_value;
           }
@@ -131,11 +131,20 @@ export default {
       }
       return suspiciousness_values;
     }
+  },
+  watch: {
+    history: function(newVal, oldVal) {
+      // console.log(newVal, oldVal);
+      this.divide_variants();
+    }
   }
 }
 </script>
 
 <style scoped>
+svg {
+  overflow: visible;
+}
 .circle {
   width: 50px;
   height: 50px;
@@ -184,5 +193,8 @@ export default {
 }
 .line {
   stroke-width: 2px;
+}
+.selected-line {
+  stroke-width: 10px;
 }
 </style>

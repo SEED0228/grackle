@@ -7,7 +7,7 @@
       <th>suspiciousnesses</th>
       <td>bases</td>
     </tr>
-    <tr  v-for="variant in history.variants" :id="variant.id" v-bind:class="{'table-success':variant.id===selected_variant_id, 'table-danger':variant.id!==selected_variant_id && parent_variant_ids.includes(variant.id)}" @click="select(variant.id)">
+    <tr  v-if="history" v-for="variant in history.variants" :id="variant.id" v-bind:class="{'table-success':variant.id===selected_variant_id, 'table-danger':variant.id!==selected_variant_id && parent_variant_ids.includes(variant.id)}" @click="select(variant.id)">
       <td>{{ variant.id }}</td>
       <td>{{variant.generationNumber}}</td>
       <td>{{ variant.fitness }}</td>
