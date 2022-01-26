@@ -32,7 +32,6 @@
 
 <script>
 import history from './assets/kgenprog-out/history.json'
-import HelloWorld from './components/HelloWorld.vue'
 import VariantTable from "./components/VariantTable"
 import VariantTree from "./components/VariantTree"
 import SuspiciousView from "./components/SuspiciousView";
@@ -41,7 +40,6 @@ export default {
   name: 'App',
   components: {
     SuspiciousView,
-    HelloWorld,
     VariantTable,
     VariantTree
   },
