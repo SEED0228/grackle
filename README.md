@@ -1,5 +1,9 @@
 # grackle
 
+## Requirements
+- JDK11+
+- npm 8.1.4
+
 ## What is Grackle?
 
 This project is a tool to visualize the program repair process of an Automated Program Repair tool written in Java for Java, [kGenProg](https://github.com/kusumotolab/kGenProg).
