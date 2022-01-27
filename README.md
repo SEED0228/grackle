@@ -1,6 +1,6 @@
 # grackle
 
-## What is Gracle?
+## What is Grackle?
 
 This project is a tool to visualize the program repair process of an Automated Program Repair tool written in Java for Java, [kGenProg](https://github.com/kusumotolab/kGenProg).
 It focuses specifically on the visualization of **suspicious** values.
@@ -24,6 +24,7 @@ npm run serve
 ```
 Then, access the [local host on port 8080](http://localhost:8080/) with a browser and select the JSON file generated earlier (maybe kgenprog-out/history.json) in the selection form on the upper right.<br>
 Then you will be able to see the automatic modification process of kGenProg.
+
 ## Project setup
 ```
 npm install
