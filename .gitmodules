@@ -1,0 +1,3 @@
+[submodule "kGenProg"]
+	path = kGenProg
+	url = git@github.com:SEED0228/kGenProg.git
