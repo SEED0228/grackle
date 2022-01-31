@@ -3,16 +3,27 @@
     <div class="row">
       <div class="col-6">
         <div class="row">
-          <button class="btn btn-success col-2 offset-3 mt-3 mb-3" @click="show_table = false; show_tree = true;">Tree</button>
-          <button class="btn btn-primary col-2 offset-1 mt-3 mb-3" @click="show_table = true; show_tree = false;">Table</button>
-          <button v-if="show_tree" class="btn btn-outline-success col-2 offset-3 mt-3 mb-3" @click="show_suspicious= true;">Suspicious</button>
-          <button v-if="show_tree" class="btn btn-outline-primary col-2 offset-1 mt-3 mb-3" @click="show_suspicious= false;">Operation</button>
+          <div class="col-2 offset-1">
+            <button class="btn btn-success col-12 mt-2 mb-2" @click="show_table = false; show_tree = true;">Tree</button>
+            <button class="btn btn-primary col-12 mt-2 mb-2" @click="show_table = true; show_tree = false;">Table</button>
+          </div>
+          <div class="col-2 offset-1">
+            <button v-if="show_tree" class="btn btn-outline-success col-12 mt-2 mb-2" @click="show_suspicious= true;">Suspicious</button>
+            <button v-if="show_tree" class="btn btn-outline-primary col-12 mt-2 mb-2" @click="show_suspicious= false;">Operation</button>
+          </div>
+          <div class="col-6" v-if="show_tree">
+            <h4>Tree Size</h4>
+            <div class="row">
+              <input v-model="node_size" type="range" id="volume" name="volume" min="20" max="80" step="10">
+            </div>
+            <label for="volume">{{node_size}}</label>
+          </div>
         </div>
         <div class="row overflow-auto var-table" v-if="show_table && renderComponent">
           <VariantTable :history=history :selected_variant_id=selected_variant_id @updateSelectedId="selected_variant_id = $event"/>
         </div>
         <div class="row var-table" style="overflow-x: scroll; overflow-y: scroll;display:block;" v-if="show_tree && renderComponent">
-          <VariantTree :show_suspicious=show_suspicious :history=history :selected_variant_id=selected_variant_id @updateSelectedId="selected_variant_id = $event"/>
+          <VariantTree :show_suspicious=show_suspicious :history=history :selected_variant_id=selected_variant_id :node_size=node_size @updateSelectedId="selected_variant_id = $event"/>
         </div>
       </div>
       <div class="col-6">
@@ -48,7 +59,8 @@ export default {
       renderComponent: true,
       show_table: false,
       show_tree: true,
-      show_suspicious: false
+      show_suspicious: false,
+      node_size: 50
     }
   },
   methods: {
@@ -90,6 +102,7 @@ export default {
       this.history =  JSON.parse(logData)
 
       // console.log(this.history)
+      await _sleep(2000);
       this.forceRerender
     }
   },
