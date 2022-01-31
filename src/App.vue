@@ -22,8 +22,6 @@
             <input class="form-control form-control-lg" id="formFileLg" type="file" ref="file" @change="load_history" >
           </div>
         </div>
-        <img alt="Vue logo" src="./assets/kgenprog-logo.png" width="200" height="200">
-<!--        <HelloWorld msg="Welcome to Your Vue.js App"/>-->
         <SuspiciousView v-if="renderComponent" :history=history :selected_variant_id=selected_variant_id />
       </div>
     </div>
