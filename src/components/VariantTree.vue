@@ -23,7 +23,7 @@
         <div v-if="variant.is_copied==false" @click="select(variant.id)" class="circle center-block" :style="{background: 'rgba(0,255,0,'+parseFloat(history.variants[variant.id].fitness)+')'}" :class="{'selected-circle':variant.id===selected_variant_id, 'parent-circle':variant.id!==selected_variant_id && parent_variant_ids.includes(variant.id)}"></div>
         <div v-if="variant.is_copied==true" @click="select(variant.id)" class="mini-line center-block"></div>
         <div v-if="variant.is_copied==true" @click="select(variant.id)" class="mini-circle center-block" :style="{background: 'rgba(0,255,0,'+parseFloat(history.variants[variant.id].fitness)+')'}"></div>
-        <div v-if="variant.is_copied==true" @click="select(variant.id)" class="mini-line center-block"></div>
+        <div v-if="variant.is_copied==true && [successful_build_variants[genNum+1].filter((v) => v.is_copied == false).map(function(v) { return history.variants[v.id].operation.parentIds }).flat(), successful_build_variants[genNum+1].filter((v) => v.is_copied == true).map(function(v) { return v.id })].flat().includes(variant.id)" @click="select(variant.id)" class="mini-line center-block"></div>
       </div>
       <div v-if="failed_build_variants[genNum].length > 0" style="min-width: 100px; height: 50px; background-color: white;">
         <img src="@/assets/batsu.png" class="cross"><br>
@@ -86,6 +86,14 @@ export default {
       for(let i=this.history.variants.slice(-1)[0].generationNumber;i>0;i--){
         let variants = this.successful_build_variants[i].filter((v) => v.is_copied == false);
         for(const v of variants) {
+          for(const id of this.history.variants[v.id].operation.parentIds) {
+            if(typeof this.successful_build_variants[i-1].find((v) => v.id === id) === 'undefined') {
+              this.successful_build_variants[i-1].push({'id': id, 'is_copied': true});
+            }
+          }
+        }
+        let failed_variants = this.failed_build_variants[i];
+        for(const v of failed_variants) {
           for(const id of this.history.variants[v.id].operation.parentIds) {
             if(typeof this.successful_build_variants[i-1].find((v) => v.id === id) === 'undefined') {
               this.successful_build_variants[i-1].push({'id': id, 'is_copied': true});
