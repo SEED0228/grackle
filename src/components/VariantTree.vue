@@ -177,7 +177,7 @@ svg {
   border-color: #007bff;
 }
 .mini-line {
-  width: 50px;
+  width: 51px;
   height: 15px;
   margin: 0;
   border-right: 3px solid;
