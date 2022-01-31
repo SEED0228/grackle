@@ -12,14 +12,26 @@ It focuses specifically on the visualization of **suspicious** values.
 
 ## How to use
 
-First, let kGenProg, a modified version of the original that can output source code and suspicious values as JSON files do the automatic program modification.
-To do so, place the program and unit test program in the kgenprog-jar folder and execute the following command
-For example, run a command like the following.
+First,build the kGenProg project. Go to the kGenProg directory to do that.
 ```
-java -jar kgenprog-jar/kGenProg-1.8.2.jar -r ./kgenprog-jar -s kgenprog-jar/CloseToZero.java -t kgenprog-jar/CloseToZeroTest.java --history-record
+cd kGenProg
+```
+Build with the gradle command. At this point, please make sure you have version 6.5.1 or 7.3.1 of gradle installed on your PC.
+```
+gradle build
+```
+Secondly, let kGenProg, a modified version of the original that can output source code and suspicious values as JSON files do the automatic program modification.
+To do so, place the program and unit test program in the kgenprog-jar folder and execute the following command. For more information about the kGenProg command, please see [here](https://github.com/SEED0228/kGenProg?organization=SEED0228&organization=SEED0228#usage). Note that you will need to use the "--history-record" option to output JSON to use this project.
+For example, run a command like the following. At this point, please make sure you have version 11 of jdk installed on your PC.
+```
+java -jar build/libs/kGenProg-1.8.2.jar -r ./ -s example/CloseToZero04/src/example/CloseToZero.java -t example/CloseToZero04/src/example/CloseToZeroTest.java --history-record
 ```
 If you run the above command, you should see kgenprog-out output.<br>
-Then, set up the project.
+Then, return to the directory of this project.
+```
+cd ..
+```
+Finally, set up the project.
 ```
 npm install
 ```
@@ -27,7 +39,7 @@ In addition, compiles and hot-reloads for development.
 ```
 npm run serve
 ```
-Then, access the [local host on port 8080](http://localhost:8080/) with a browser and select the JSON file generated earlier (maybe kgenprog-out/history.json) in the selection form on the upper right.<br>
+Then, access the [local host on port 8080](http://localhost:8080/) with a browser and select the JSON file generated earlier (maybe kGenProg/kgenprog-out/history.json) in the selection form on the upper right.<br>
 Then you will be able to see the automatic modification process of kGenProg.
 
 ## Project setup
