@@ -3,6 +3,7 @@
 ## Requirements
 - JDK11+
 - npm 8.1.4
+- gradle 6.5 or 7.3.1
 
 ## What is Grackle?
 
