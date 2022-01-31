@@ -12,7 +12,12 @@
     <h3 v-else>ソースコードを表示できません</h3>
   </template>
   <template v-else-if="selected_code_option === 2">
-    <pre v-if="selected_variant.patch.slice(-1)[0].diff !== null" class="prettyprint linenums source-code prettyprinted code_width" id="diff"><ol class="linenums"><li v-if="selected_variant.patch.slice(-1)[0].diff" v-for="(code_line, index) in selected_variant.patch.slice(-1)[0].diff.slice(1,-1).split(',').slice(5)" class="line" :class="'L'+(index+1)" :style="{background: 'rgba('+(code_line[1] === '-' ? 255 : 0)+','+(code_line[1] === '+' ? 255 : 0)+',0,'+(code_line[1] === '+' || code_line[1] === '-' ? 0.6 : 0.0)+')'}">{{code_line}}</li></ol></pre>
+    <div class="line-head">{{selected_variant.patch.slice(-1)[0].diff.slice(1,-1).split(',').slice(0, 5).join()}}</div>
+    <pre v-if="selected_variant.patch.slice(-1)[0].diff !== null" class="prettyprint linenums source-code prettyprinted code_width" id="diff">
+      <ol class="linenums">
+        <li v-if="selected_variant.patch.slice(-1)[0].diff" v-for="(code_line, index) in selected_variant.patch.slice(-1)[0].diff.slice(1,-1).split(',').slice(5)" class="line" :class="'L'+(index+1)" :style="{background: 'rgba('+(code_line[1] === '-' ? 255 : 0)+','+(code_line[1] === '+' ? 255 : 0)+',0,'+(code_line[1] === '+' || code_line[1] === '-' ? 0.6 : 0.0)+')'}">{{code_line}}</li>
+      </ol>
+    </pre>
     <h3 v-else>diffを表示できません</h3>
   </template>
   <select class="form-select my-5" v-model="selected_table_option" v-if="selected_variant">
@@ -170,5 +175,10 @@ export default {
     text-indent: 0px !important;
     text-align: start !important;
     text-align-last: start !important;
+  }
+
+  .line-head {
+    background-color: #a0a0a0;
+    text-align: left;
   }
 </style>
