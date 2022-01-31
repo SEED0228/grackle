@@ -100,9 +100,7 @@ export default {
       const logData = await this.getFileData(file)
 
       this.history =  JSON.parse(logData)
-
-      // console.log(this.history)
-      await _sleep(2000);
+      this.selected_variant_id = null
       this.forceRerender
     }
   },
