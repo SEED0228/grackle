@@ -31,7 +31,11 @@ gradle build
 ```
 
 Secondly, let kGenProg, a modified version of the original that can output source code and suspicious values as JSON files do the automatic program modification.
-To do so, place the program and unit test program somewhere in the kGenProg folder and execute the following command. For more information about the kGenProg command, please see [here](https://github.com/SEED0228/kGenProg?organization=SEED0228&organization=SEED0228#usage). Note that you will need to use the "--history-record" option to output JSON to use this project.<br>
+To do so, place the program and unit test program somewhere in the kGenProg folder and execute the following command. For more information about the kGenProg command, please see [here](https://github.com/SEED0228/kGenProg?organization=SEED0228&organization=SEED0228#usage). Note that you will need to use the "--history-record" option to output JSON to use this project.
+
+```
+java -jar build/libs/kGenProg-1.8.2.jar -r ./ -s <java program code> -t <test code> --history-record
+```
 
 For example, run a command like the following. At this point, please make sure you have version 11 of jdk installed on your PC.
 
