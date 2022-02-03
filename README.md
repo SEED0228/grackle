@@ -89,3 +89,4 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 Copyright (c) 2018-2021 the kGenProg team in Kusumoto Lab (Yoshiki Higo, Shinsuke Matsumoto, Ryo Arima, Akito Tanikado, Keigo Naitou, Hiroyuki Matsuo, Junnosuke Matsumoto, Yuya Tomida, Kaisei Hanayama, Tetsushi Kuma, Ryoko Izuta, and Hiroto Watanabe)
+https://github.com/kusumotolab/kGenProg
