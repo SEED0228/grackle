@@ -2,6 +2,7 @@
 
 ## Requirements
 - JDK11+
+- node 14.xx
 - npm 8.1.4
 - gradle 6.5 or 7.3.1
 
