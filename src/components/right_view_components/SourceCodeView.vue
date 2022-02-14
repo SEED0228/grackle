@@ -28,19 +28,21 @@ export default {
   data() {
     return {
       sourceCode: null,
-      selected_variant: null,
       suspiciousness_values: [] //行ごとの最大疑惑値
     }
   },
+  created: function () {
+    this.loadVariantInformation();
+  },
   methods: {
     loadVariantInformation: function () {
-      this.selected_variant = this.history.variants[this.selected_variant_id];
-      if (this.selected_variant) {
-        this.sourceCode = this.selected_variant.sourceCode === "NaN" ? null : this.selected_variant.sourceCode;
+      const selected_variant = this.history.variants[this.selected_variant_id];
+      if (selected_variant) {
+        this.sourceCode = selected_variant.sourceCode === "NaN" ? null : selected_variant.sourceCode;
         this.suspiciousness_values = [];
       }
       if (this.sourceCode !== null) {
-        this.update_suspiciousness_values(this.selected_variant);
+        this.update_suspiciousness_values(selected_variant);
       }
     },
     update_suspiciousness_values: function(selected_variant) {
@@ -69,5 +71,42 @@ export default {
 </script>
 
 <style scoped>
+#code {
+  max-height: 700px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  text-align: left;
+}
 
+.code_width {
+  height: 35vh;
+}
+
+#diff {
+  max-height: 700px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+pre.prettyprint {
+  padding: 2px;
+  border: 1px solid #888;
+}
+
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.line::marker {
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  text-indent: 0px !important;
+  text-align: start !important;
+  text-align-last: start !important;
+}
 </style>
