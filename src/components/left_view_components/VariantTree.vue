@@ -124,14 +124,17 @@
               height: Math.round(node_size)/5*2+'px',
               background: 'rgba(0,255,0,'+parseFloat(history.variants[variant.id].fitness)+')'
             }"></div>
-        <div
-            v-if="variant.is_copied==true && [successful_build_variant_information[genNum+1].filter((v) => v.is_copied == false).map(function(v) { return history.variants[v.id].operation.parentIds }).flat(), successful_build_variant_information[genNum+1].filter((v) => v.is_copied == true).map(function(v) { return v.id })].flat().includes(variant.id)"
-            @click="select(variant.id)"
-            class="mini-line center-block"
-            :style="{
+        <template v-if="genNum !== successful_build_variant_information.length - 1">
+          <div
+              v-if="variant.is_copied==true && [successful_build_variant_information[genNum+1].filter((v) => v.is_copied == false).map(function(v) { return history.variants[v.id].operation.parentIds }).flat(), successful_build_variant_information[genNum+1].filter((v) => v.is_copied == true).map(function(v) { return v.id })].flat().includes(variant.id)"
+              @click="select(variant.id)"
+              class="mini-line center-block"
+              :style="{
               width: Math.round(node_size)+1+'px',
               height: Math.round(node_size)*0.3+'px'
-            }"></div>
+            }"
+          ></div>
+        </template>
       </div>
       <div
           v-if="failed_build_variant_information[genNum].length > 0"
@@ -201,6 +204,16 @@ export default {
         }
       }
       // コピーされたバリアントを追加
+      for(const v of this.history.variants) {
+        const selection_count = (v.id !== 0) ? v.selectionCount : v.selectionCount + 1;
+        for(let i=1;i<=selection_count;i++) {
+          if(typeof this.successful_build_variant_information[v.generationNumber+i].find((v2) => v2.id === v.id) === 'undefined') {
+            this.successful_build_variant_information[v.generationNumber+i].push({'id': v.id, 'is_copied': true});
+            console.log(v.generationNumber+i);
+            console.log(v.id);
+          }
+        }
+      }
       for(let i=this.history.variants.slice(-1)[0].generationNumber;i>0;i--){
         let variants = this.successful_build_variant_information[i].filter((v) => v.is_copied == false);
         for(const v of variants) {
