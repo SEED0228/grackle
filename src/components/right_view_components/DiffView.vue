@@ -27,28 +27,7 @@
 <script>
 export default {
   name: "DiffView",
-  props: ["selected_variant_id", "history"],
-  data() {
-    return {
-      selected_variant: null
-    }
-  },
-  created: function () {
-    this.loadVariantInformation();
-  },
-  methods: {
-    loadVariantInformation: function () {
-      this.selected_variant = this.history.variants[this.selected_variant_id];
-    }
-  },
-  watch: {
-    history: function(){
-      this.selected_variant = null;
-    },
-    selected_variant_id: function() {
-      this.loadVariantInformation();
-    }
-  }
+  props: ["selected_variant"]
 }
 </script>
 

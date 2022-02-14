@@ -5,93 +5,44 @@
       <input class="form-control form-control-lg" id="formFileLg" type="file" ref="file" @change="loadHistory" >
     </div>
   </div>
-  <h1>{{selected_variant_id}}</h1>
-  <select class="form-select my-3" v-model="selected_code_option" v-if="selected_variant_id >= 0 && selected_variant_id !== null">
-    <option v-for="option in code_options"
-            v-bind:value="option.id"
-            v-bind:key="option.id">
-      {{ option.name }}
-    </option>
-  </select>
-  <template v-if="selected_code_option === 1">
-    <SourceCodeView :history="history" :selected_variant_id="selected_variant_id"></SourceCodeView>
+  <template v-if="selected_variant">
+    <h1>{{selected_variant_id}}</h1>
+    <select class="form-select my-3" v-model="selected_code_option">
+      <option v-for="option in code_options"
+              v-bind:value="option.id"
+              v-bind:key="option.id">
+        {{ option.name }}
+      </option>
+    </select>
+    <SourceCodeView v-if="selected_code_option === 1" :selected_variant="selected_variant" :history="history"></SourceCodeView>
+    <DiffView v-else-if="selected_code_option === 2" :selected_variant="selected_variant"></DiffView>
+    <select
+        class="form-select my-5"
+        v-model="selected_table_option"
+    >
+      <option v-for="option in table_options"
+              v-bind:value="option.id"
+              v-bind:key="option.id"
+      >{{ option.name }}</option>
+    </select>
+    <SuspiciousnessTable v-if="selected_table_option === 1" :selected_variant="selected_variant"></SuspiciousnessTable>
+    <TestResultView v-if="selected_table_option === 2" :selected_variant="selected_variant"></TestResultView>
   </template>
-  <template v-else-if="selected_code_option === 2">
-    <DiffView :history="history" :selected_variant_id="selected_variant_id"></DiffView>
-  </template>
-  <select
-      class="form-select my-5"
-      v-model="selected_table_option"
-      v-if="selected_variant_id >= 0 && selected_variant_id !== null"
-  >
-    <option v-for="option in table_options"
-            v-bind:value="option.id"
-            v-bind:key="option.id"
-    >{{ option.name }}</option>
-  </select>
-  <table
-      v-if="selected_variant && selected_table_option === 1"
-      class="table table-striped my-5"
-  >
-    <thead>
-      <tr>
-        <th>value</th>
-        <th>from</th>
-        <th>to</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="suspiciousness in selected_variant.suspiciousnesses">
-        <td>{{suspiciousness.value}}</td>
-        <td>{{suspiciousness.lineNumberRange.start}}</td>
-        <td>{{suspiciousness.lineNumberRange.end}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <template
-      v-if="selected_variant && selected_table_option === 2"
-  >
-    <div v-if="selected_variant" class="row mx-2 my-5">
-      <div class="col-3 border border-dark">
-        <p class="fs-2 mt-1">{{selected_variant.testSummary.testResults.length}}</p>
-        <p class="fs-6">tests</p>
-      </div>
-      <div class="col-3 border border-dark">
-        <p class="fs-2 mt-1">{{selected_variant.testSummary.testResults.filter((v) => v.isSuccess).length}}</p>
-        <p class="fs-6">successes</p>
-      </div>
-      <div class="col-3 border border-dark">
-        <p class="fs-2 mt-1">{{selected_variant.testSummary.testResults.filter((v) => !v.isSuccess).length}}</p>
-        <p class="fs-6">failures</p>
-      </div>
-      <div class="col-3 border border-dark">
-        <p class="fs-2 mt-1">{{Math.round(selected_variant.testSummary.successRate * 100) / 100}}</p>
-        <p class="fs-6">rate</p>
-      </div>
-    </div>
-    <table v-if="selected_variant" class="table table-striped">
-      <thead>
-      <tr>
-        <th>fqn</th>
-        <th>is success?</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="result in selected_variant.testSummary.testResults">
-        <td>{{result.fqn}}</td>
-        <td>{{result.isSuccess}}</td>
-      </tr>
-      </tbody>
-    </table>
+  <template v-else>
+    <img alt="Vue logo" src="../assets/kgenprog-logo.png" width="200" height="200">
+    <h3><strong>Grackle</strong> is a tool that visualizes the automatic program modification process of <strong>kGenProg</strong> in a tree structure.
+      You can get more information about the variant by clicking on the <strong>nodes</strong> in the tree.</h3>
   </template>
 </template>
 
 <script>
 import SourceCodeView from "./right_view_components/SourceCodeView";
 import DiffView from "./right_view_components/DiffView";
+import SuspiciousnessTable from "./right_view_components/SuspiciousnessTable";
+import TestResultView from "./right_view_components/TestResultView";
 export default {
   name: "RightView",
-  components: {DiffView, SourceCodeView},
+  components: {TestResultView, SuspiciousnessTable, DiffView, SourceCodeView},
   props: ['history', 'selected_variant_id'],
   methods: {
     loadVariantInformation: function() {

@@ -24,7 +24,7 @@
 <script>
 export default {
   name: "SourceCodeView",
-  props: ["selected_variant_id", "history"],
+  props: ["selected_variant", "history"],
   data() {
     return {
       sourceCode: null,
@@ -36,13 +36,12 @@ export default {
   },
   methods: {
     loadVariantInformation: function () {
-      const selected_variant = this.history.variants[this.selected_variant_id];
-      if (selected_variant) {
-        this.sourceCode = selected_variant.sourceCode === "NaN" ? null : selected_variant.sourceCode;
+      if (this.selected_variant) {
+        this.sourceCode = this.selected_variant.sourceCode === "NaN" ? null : this.selected_variant.sourceCode;
         this.suspiciousness_values = [];
       }
       if (this.sourceCode !== null) {
-        this.update_suspiciousness_values(selected_variant);
+        this.update_suspiciousness_values(this.selected_variant);
       }
     },
     update_suspiciousness_values: function(selected_variant) {
@@ -59,11 +58,9 @@ export default {
   watch: {
     history: function(){
       this.sourceCode = null;
-      this.selected_variant = null;
       this.suspiciousness_values = [];
-      console.log(this.sourceCode)
     },
-    selected_variant_id: function(newVal, oldVal) {
+    selected_variant: function() {
       this.loadVariantInformation();
     }
   }
