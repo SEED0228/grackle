@@ -1,4 +1,10 @@
 <template>
+  <div class="row">
+    <div class="col-10 offset-1 mt-3 mb-3">
+      <label for="formFileLg" class="form-label">Input the json file output from kgenprog</label>
+      <input class="form-control form-control-lg" id="formFileLg" type="file" ref="file" @change="loadHistory" >
+    </div>
+  </div>
   <h1>{{selected_variant_id}}</h1>
   <select class="form-select my-3" v-model="selected_code_option" v-if="selected_variant">
     <option v-for="option in code_options"
@@ -11,7 +17,7 @@
     <pre v-if="sourceCode !== null" class="prettyprint linenums source-code prettyprinted code_width" id="code"><ol class="linenums"><li v-if="sourceCode" v-for="(code_line, index) in sourceCode.split('\n')" class="line" :class="'L'+(index+1)" :style="{background: 'rgba('+255+',0,0,'+suspiciousness_values[index+1]**3*0.8+')'}">{{code_line}}</li></ol></pre>
     <template v-else>
       <img alt="Vue logo" src="../assets/kgenprog-logo.png" width="200" height="200">
-      <h3>ソースコードを表示できません</h3>
+      <h3>Unable to view source code</h3>
     </template>
   </template>
   <template v-else-if="selected_code_option === 2">
@@ -23,7 +29,7 @@
     </pre>
     <template v-else>
       <img alt="Vue logo" src="../assets/kgenprog-logo.png" width="200" height="200">
-      <h3>diffを表示できません</h3>
+      <h3>Unable to display diff</h3>
     </template>
   </template>
   <select class="form-select my-5" v-model="selected_table_option" v-if="selected_variant">
@@ -87,12 +93,11 @@
 
 <script>
 export default {
-  name: "SuspiciousView",
+  name: "RightView",
   props: ['history', 'selected_variant_id'],
   methods: {
-    load_file: function() {
+    loadVariantInformation: function() {
       this.selected_variant = this.history.variants[this.selected_variant_id];
-      // console.log(this.selected_variant)
       if(this.selected_variant) {
         this.sourceCode = this.selected_variant.sourceCode === "NaN" ? null : this.selected_variant.sourceCode;
         this.suspiciousness_values = [];
@@ -110,6 +115,41 @@ export default {
           }
         }
       }
+    },
+    getFileData(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsText(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error)
+      })
+    },
+    checkFile(file) {
+      if (!file) {
+        return false
+      }
+
+      if (file.type !== 'application/json') {
+        return false
+      }
+
+      const SIZE_LIMIT = 5000000 // 5MB
+      if (file.size > SIZE_LIMIT) {
+        return false
+      }
+      return true
+    },
+    async loadHistory(event) {
+      const files = event.target.files || event.dataTransfer.files
+      const file = files[0]
+
+      if (!this.checkFile(file)) {
+        alert("ファイルを読み込めませんでした")
+        return
+      }
+
+      const logData = await this.getFileData(file)
+      this.$emit('updateHistory', JSON.parse(logData))
     }
   },
   data() {
@@ -131,8 +171,7 @@ export default {
   },
   watch: {
     selected_variant_id: function(newVal, oldVal) {
-      // console.log(newVal, oldVal);
-      this.load_file();
+      this.loadVariantInformation();
     },
     history: function(newVal, oldVal) {
       this.sourceCode = null;

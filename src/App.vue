@@ -2,38 +2,20 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
-        <div class="row">
-          <div class="col-2 offset-1">
-            <button class="btn btn-success col-12 mt-2 mb-2" @click="show_table = false; show_tree = true;">Tree</button>
-            <button class="btn btn-primary col-12 mt-2 mb-2" @click="show_table = true; show_tree = false;">Table</button>
-          </div>
-          <div class="col-2 offset-1">
-            <button v-if="show_tree" class="btn btn-outline-success col-12 mt-2 mb-2" @click="show_suspicious= true;">Suspicious</button>
-            <button v-if="show_tree" class="btn btn-outline-primary col-12 mt-2 mb-2" @click="show_suspicious= false;">Operation</button>
-          </div>
-          <div class="col-6" v-if="show_tree">
-            <h4>Tree Size</h4>
-            <div class="row">
-              <input v-model="node_size" type="range" id="volume" name="volume" min="20" max="80" step="10">
-            </div>
-            <label for="volume">{{node_size}}</label>
-          </div>
-        </div>
-        <div class="row overflow-auto var-table" v-if="show_table && renderComponent">
-          <VariantTable :history=history :selected_variant_id=selected_variant_id @updateSelectedVariantId="selected_variant_id = $event"/>
-        </div>
-        <div class="row var-table" style="overflow-x: scroll; overflow-y: scroll;display:block;" v-if="show_tree && renderComponent">
-          <VariantTree :show_suspicious=show_suspicious :history=history :selected_variant_id=selected_variant_id :node_size=node_size @updateSelectedVariantId="selected_variant_id = $event"/>
-        </div>
+        <LeftView
+            :selected_variant_id=selected_variant_id
+            :history=history
+            @updateSelectedVariantId="selected_variant_id = $event"
+            v-if="renderComponent"
+        />
       </div>
       <div class="col-6">
-        <div class="row">
-          <div class="col-10 offset-1 mt-3 mb-3">
-            <label for="formFileLg" class="form-label">kgenprogから出力されたjsonファイルを入力</label>
-            <input class="form-control form-control-lg" id="formFileLg" type="file" ref="file" @change="load_history" >
-          </div>
-        </div>
-        <SuspiciousView v-if="renderComponent" :history=history :selected_variant_id=selected_variant_id />
+        <RightView
+            v-if="renderComponent"
+            :history=history
+            :selected_variant_id=selected_variant_id
+            @updateHistory="updateHistory"
+        />
       </div>
     </div>
   </div>
@@ -41,77 +23,37 @@
 
 <script>
 import history from './assets/kgenprog-out/history.json'
-import VariantTable from "./components/VariantTable"
-import VariantTree from "./components/VariantTree"
-import SuspiciousView from "./components/SuspiciousView";
+import RightView from "./components/RightView";
+import LeftView from "./components/LeftView";
 
 export default {
   name: 'App',
   components: {
-    SuspiciousView,
-    VariantTable,
-    VariantTree
+    LeftView,
+    RightView
   },
   data() {
     return {
       history: history,
       selected_variant_id: null,
-      renderComponent: true,
-      show_table: false,
-      show_tree: true,
-      show_suspicious: false,
-      node_size: 50
+      renderComponent: true
     }
   },
   methods: {
-    getFileData(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsText(file)
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = error => reject(error)
-      })
-    },
-
-    checkFile(file) {
-      if (!file) {
-        return false
-      }
-
-      if (file.type !== 'application/json') {
-        return false
-      }
-
-      const SIZE_LIMIT = 5000000 // 5MB
-      if (file.size > SIZE_LIMIT) {
-        return false
-      }
-      return true
-    },
-    async load_history(event) {
-      const files = event.target.files || event.dataTransfer.files
-      const file = files[0]
-
-      if (!this.checkFile(file)) {
-        alert("ファイルを読み込めませんでした")
-        return
-      }
-
-      const logData = await this.getFileData(file)
-
-      this.history =  JSON.parse(logData)
+    updateHistory(history) {
+      this.history =  history
       this.selected_variant_id = null
       this.forceRerender
-    }
-  },
-  forceRerender() {
-    // Removing my-component from the DOM
-    this.renderComponent = false;
+    },
+    forceRerender() {
+      // Removing my-component from the DOM
+      this.renderComponent = false;
 
-    this.$nextTick(() => {
-      // Adding the component back in
-      this.renderComponent = true;
-    });
+      this.$nextTick(() => {
+        // Adding the component back in
+        this.renderComponent = true;
+      });
+    }
   }
 }
 </script>
@@ -124,9 +66,5 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
-
-.var-table {
-  height: 80vh;
 }
 </style>
