@@ -20,10 +20,10 @@
           </div>
         </div>
         <div class="row overflow-auto var-table" v-if="show_table && renderComponent">
-          <VariantTable :history=history :selected_variant_id=selected_variant_id @updateSelectedId="selected_variant_id = $event"/>
+          <VariantTable :history=history :selected_variant_id=selected_variant_id @updateSelectedVariantId="selected_variant_id = $event"/>
         </div>
         <div class="row var-table" style="overflow-x: scroll; overflow-y: scroll;display:block;" v-if="show_tree && renderComponent">
-          <VariantTree :show_suspicious=show_suspicious :history=history :selected_variant_id=selected_variant_id :node_size=node_size @updateSelectedId="selected_variant_id = $event"/>
+          <VariantTree :show_suspicious=show_suspicious :history=history :selected_variant_id=selected_variant_id :node_size=node_size @updateSelectedVariantId="selected_variant_id = $event"/>
         </div>
       </div>
       <div class="col-6">

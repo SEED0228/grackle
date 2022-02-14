@@ -25,7 +25,7 @@
 
 export default {
   name: "VariantTable",
-  props: ['history', 'selected_variant_id', 'updateSelectedId'],
+  props: ['history', 'selected_variant_id', 'updateSelectedVariantId'],
   data() {
     return {
       parent_variant_ids: []
@@ -34,7 +34,7 @@ export default {
   methods: {
     select: function(id) {
       this.parent_variant_ids = [];
-      this.$emit('updateSelectedId', id);
+      this.$emit('updateSelectedVariantId', id);
       const stack = [];
       stack.push(id);
       var x, ids;
