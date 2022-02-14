@@ -11,10 +11,10 @@
       </div>
       <div class="col-6">
         <RightView
-            v-if="renderComponent"
             :history=history
             :selected_variant_id=selected_variant_id
             @updateHistory="updateHistory"
+            v-if="renderComponent"
         />
       </div>
     </div>

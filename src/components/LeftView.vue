@@ -43,6 +43,7 @@
         :history=history
         :selected_variant_id=selected_variant_id
         @updateSelectedVariantId="$emit('updateSelectedVariantId', $event)"
+        v-if="renderComponent"
     />
   </div>
   <div
@@ -56,6 +57,7 @@
         :selected_variant_id=selected_variant_id
         :node_size=node_size
         @updateSelectedVariantId="$emit('updateSelectedVariantId', $event)"
+        v-if="renderComponent"
     />
   </div>
 </template>
@@ -76,7 +78,24 @@ export default {
       show_table: false,
       show_tree: true,
       show_suspicious: false,
-      node_size: 50
+      node_size: 50,
+      renderComponent: true
+    }
+  },
+  methods: {
+    forceRerender() {
+      // Removing my-component from the DOM
+      this.renderComponent = false;
+
+      this.$nextTick(() => {
+        // Adding the component back in
+        this.renderComponent = true;
+      });
+    }
+  },
+  watch: {
+    history: function (){
+      this.forceRerender();
     }
   }
 }
