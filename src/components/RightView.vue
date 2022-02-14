@@ -6,7 +6,7 @@
     </div>
   </div>
   <h1>{{selected_variant_id}}</h1>
-  <select class="form-select my-3" v-model="selected_code_option" v-if="selected_variant">
+  <select class="form-select my-3" v-model="selected_code_option" v-if="selected_variant_id">
     <option v-for="option in code_options"
             v-bind:value="option.id"
             v-bind:key="option.id">
@@ -14,26 +14,7 @@
     </option>
   </select>
   <template v-if="selected_code_option === 1">
-    <pre
-        v-if="sourceCode !== null"
-        class="prettyprint linenums source-code prettyprinted code_width"
-        id="code"
-    >
-      <ol class="linenums">
-        <li
-            v-if="sourceCode"
-            v-for="(code_line, index) in sourceCode.split('\n')" class="line" :class="'L'+(index+1)"
-            :style="
-            {
-              background: 'rgba('+255+',0,0,'+suspiciousness_values[index+1]**3*0.8+')'
-            }"
-        >{{code_line}}</li>
-      </ol>
-    </pre>
-    <template v-else>
-      <img alt="Vue logo" src="../assets/kgenprog-logo.png" width="200" height="200">
-      <h3>Unable to view source code</h3>
-    </template>
+    <SourceCodeView :history="history" :selected_variant_id="selected_variant_id"></SourceCodeView>
   </template>
   <template v-else-if="selected_code_option === 2">
     <div class="line-head">{{selected_variant.patch.slice(-1)[0].diff.slice(1,-1).split(',').slice(0, 5).join()}}</div>
@@ -128,8 +109,10 @@
 </template>
 
 <script>
+import SourceCodeView from "./right_view_components/SourceCodeView";
 export default {
   name: "RightView",
+  components: {SourceCodeView},
   props: ['history', 'selected_variant_id'],
   methods: {
     loadVariantInformation: function() {
