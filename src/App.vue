@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6">
+      <div class="col-8">
         <LeftView
             :selected_variant_id=selected_variant_id
             :history=history
@@ -9,7 +9,7 @@
             v-if="renderComponent"
         />
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <RightView
             :history=history
             :selected_variant_id=selected_variant_id
