@@ -14,7 +14,22 @@
     </option>
   </select>
   <template v-if="selected_code_option === 1">
-    <pre v-if="sourceCode !== null" class="prettyprint linenums source-code prettyprinted code_width" id="code"><ol class="linenums"><li v-if="sourceCode" v-for="(code_line, index) in sourceCode.split('\n')" class="line" :class="'L'+(index+1)" :style="{background: 'rgba('+255+',0,0,'+suspiciousness_values[index+1]**3*0.8+')'}">{{code_line}}</li></ol></pre>
+    <pre
+        v-if="sourceCode !== null"
+        class="prettyprint linenums source-code prettyprinted code_width"
+        id="code"
+    >
+      <ol class="linenums">
+        <li
+            v-if="sourceCode"
+            v-for="(code_line, index) in sourceCode.split('\n')" class="line" :class="'L'+(index+1)"
+            :style="
+            {
+              background: 'rgba('+255+',0,0,'+suspiciousness_values[index+1]**3*0.8+')'
+            }"
+        >{{code_line}}</li>
+      </ol>
+    </pre>
     <template v-else>
       <img alt="Vue logo" src="../assets/kgenprog-logo.png" width="200" height="200">
       <h3>Unable to view source code</h3>
@@ -22,9 +37,22 @@
   </template>
   <template v-else-if="selected_code_option === 2">
     <div class="line-head">{{selected_variant.patch.slice(-1)[0].diff.slice(1,-1).split(',').slice(0, 5).join()}}</div>
-    <pre v-if="selected_variant.patch.slice(-1)[0].diff !== null" class="prettyprint linenums source-code prettyprinted code_width" id="diff">
+    <pre
+        v-if="selected_variant.patch.slice(-1)[0].diff !== null"
+        class="prettyprint linenums source-code prettyprinted code_width"
+        id="diff"
+    >
       <ol class="linenums">
-        <li v-if="selected_variant.patch.slice(-1)[0].diff" v-for="(code_line, index) in selected_variant.patch.slice(-1)[0].diff.slice(1,-1).split(',').slice(5)" class="line" :class="'L'+(index+1)" :style="{background: 'rgba('+(code_line[1] === '-' ? 255 : 0)+','+(code_line[1] === '+' ? 255 : 0)+',0,'+(code_line[1] === '+' || code_line[1] === '-' ? 0.6 : 0.0)+')'}">{{code_line}}</li>
+        <li
+            v-if="selected_variant.patch.slice(-1)[0].diff"
+            v-for="(code_line, index) in selected_variant.patch.slice(-1)[0].diff.slice(1,-1).split(',').slice(5)"
+            class="line"
+            :class="'L'+(index+1)"
+            :style="
+            {
+              background: 'rgba('+(code_line[1] === '-' ? 255 : 0)+','+(code_line[1] === '+' ? 255 : 0)+',0,'+(code_line[1] === '+' || code_line[1] === '-' ? 0.6 : 0.0)+')'
+            }"
+        >{{code_line}}</li>
       </ol>
     </pre>
     <template v-else>
@@ -32,14 +60,20 @@
       <h3>Unable to display diff</h3>
     </template>
   </template>
-  <select class="form-select my-5" v-model="selected_table_option" v-if="selected_variant">
+  <select
+      class="form-select my-5"
+      v-model="selected_table_option"
+      v-if="selected_variant"
+  >
     <option v-for="option in table_options"
             v-bind:value="option.id"
-            v-bind:key="option.id">
-      {{ option.name }}
-    </option>
+            v-bind:key="option.id"
+    >{{ option.name }}</option>
   </select>
-  <table v-if="selected_variant && selected_table_option === 1" class="table table-striped my-5">
+  <table
+      v-if="selected_variant && selected_table_option === 1"
+      class="table table-striped my-5"
+  >
     <thead>
       <tr>
         <th>value</th>
@@ -55,7 +89,9 @@
       </tr>
     </tbody>
   </table>
-  <template v-if="selected_variant && selected_table_option === 2">
+  <template
+      v-if="selected_variant && selected_table_option === 2"
+  >
     <div v-if="selected_variant" class="row mx-2 my-5">
       <div class="col-3 border border-dark">
         <p class="fs-2 mt-1">{{selected_variant.testSummary.testResults.length}}</p>

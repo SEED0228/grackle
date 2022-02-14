@@ -1,32 +1,151 @@
 <template>
-  <div v-for="(variants, genNum) in successful_build_variant_information" class="col-12" :style="{height: (genNum === 0 ? Math.round(node_size) : Math.round(node_size)*4)+'px'}">
-    <div :style="'text-align: left; margin-left: '+Math.round(node_size)*2+'px;'" v-if="0 < genNum">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" :height=Math.round(node_size)*3>
-        <template v-for="(variant) in variants.filter((v) => v.is_copied == true)">
-          <line v-if="show_suspicious" class="line"  :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === variant.id).index*Math.round(node_size)*2" y1="0" :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2" :y2="Math.round(node_size)*3" stroke="black" opacity="0.5"/>
-          <line v-else class="line"  :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === variant.id).index*Math.round(node_size)*2" y1="0" :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2" :y2="Math.round(node_size)*3" stroke="black"/>
+  <div
+      v-for="(variants, genNum) in successful_build_variant_information"
+      class="col-12"
+      :style="
+      {
+        height: (genNum === 0 ? Math.round(node_size) : Math.round(node_size)*4)+'px'
+      }"
+  >
+    <div
+        :style="'text-align: left; margin-left: '+Math.round(node_size)*2+'px;'"
+        v-if="0 < genNum"
+    >
+      <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          :height=Math.round(node_size)*3
+      >
+        <template
+            v-for="(variant) in variants.filter((v) => v.is_copied == true)"
+        >
+          <line
+              v-if="show_suspicious"
+              class="line"
+              :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === variant.id).index*Math.round(node_size)*2"
+              y1="0"
+              :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2"
+              :y2="Math.round(node_size)*3"
+              stroke="black"
+              opacity="0.5"
+          />
+          <line
+              v-else
+              class="line"
+              :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === variant.id).index*Math.round(node_size)*2"
+              y1="0"
+              :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2"
+              :y2="Math.round(node_size)*3"
+              stroke="black"
+          />
         </template>
-        <template v-for="(variant) in variants.filter((v) => v.is_copied == false)">
-          <template v-for="id in history.variants[variant.id].operation.parentIds">
-            <line v-if="show_suspicious && variant.operation_name !== 'random-crossover'" class="line" :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === id).index*Math.round(node_size)*2" y1="0" :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2" :y2="Math.round(node_size)*3" stroke="red" :opacity="variant.max_suspicious_value**3"/>
-            <line v-else-if="show_suspicious && variant.operation_name === 'random-crossover'" class="line" :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === id).index*Math.round(node_size)*2" y1="0" :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2" :y2="Math.round(node_size)*3" stroke="black"/>
-            <line v-else class="line" :class="{'insert-line': (variant.operation_name === 'insert_after' || variant.operation_name === 'insert_before'), 'replace-line': (variant.operation_name === 'replace'), 'cross-line': (variant.operation_name === 'random-crossover'), 'delete-line': (variant.operation_name === 'delete')}" :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === id).index*Math.round(node_size)*2" y1="0" :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2" :y2="Math.round(node_size)*3" stroke="black"/>
+        <template
+            v-for="(variant) in variants.filter((v) => v.is_copied == false)"
+        >
+          <template
+              v-for="id in history.variants[variant.id].operation.parentIds"
+          >
+            <line
+                v-if="show_suspicious && variant.operation_name !== 'random-crossover'"
+                class="line"
+                :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === id).index*Math.round(node_size)*2"
+                y1="0"
+                :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2"
+                :y2="Math.round(node_size)*3"
+                stroke="red"
+                :opacity="variant.max_suspicious_value**3"
+            />
+            <line
+                v-else-if="show_suspicious && variant.operation_name === 'random-crossover'"
+                class="line" :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === id).index*Math.round(node_size)*2"
+                y1="0"
+                :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2"
+                :y2="Math.round(node_size)*3"
+                stroke="black"
+            />
+            <line
+                v-else
+                class="line"
+                :class="
+                {
+                  'insert-line': (variant.operation_name === 'insert_after' || variant.operation_name === 'insert_before'),
+                  'replace-line': (variant.operation_name === 'replace'), 'cross-line': (variant.operation_name === 'random-crossover'),
+                  'delete-line': (variant.operation_name === 'delete')
+                }"
+                :x1="Math.round(node_size)+successful_build_variant_information[genNum-1].find((v) => v.id === id).index*Math.round(node_size)*2"
+                y1="0"
+                :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2"
+                :y2="Math.round(node_size)*3"
+                stroke="black"
+            />
           </template>
         </template>
       </svg>
     </div>
     <div class="d-flex flex-nowrap">
-      <div :style="'min-width: '+Math.round(node_size)*2+'px; height: '+Math.round(node_size)+'px; background-color: white;'" class="">
+      <div
+          :style="'min-width: '+Math.round(node_size)*2+'px; height: '+Math.round(node_size)+'px; background-color: white;'"
+      >
         <h3>{{genNum}}</h3>
       </div>
-      <div v-for="variant in variants" :style="'min-width: '+Math.round(node_size)*2+'px; height: '+Math.round(node_size)+'px; background-color: white;'" class="">
-        <div v-if="variant.is_copied==false" @click="select(variant.id)" class="circle center-block" :style="{width: Math.round(node_size)+'px', height: Math.round(node_size)+'px', background: 'rgba(0,255,0,'+parseFloat(history.variants[variant.id].fitness)+')'}" :class="{'selected-circle':variant.id===selected_variant_id, 'parent-circle':variant.id!==selected_variant_id && parent_variant_ids.includes(variant.id)}"></div>
-        <div v-if="variant.is_copied==true" @click="select(variant.id)" class="mini-line center-block" :style="{width: Math.round(node_size)+1+'px', height: Math.round(node_size)*0.3+'px'}"></div>
-        <div v-if="variant.is_copied==true" @click="select(variant.id)" class="mini-circle center-block" :style="{width: Math.round(node_size)/5*2+'px', height: Math.round(node_size)/5*2+'px', background: 'rgba(0,255,0,'+parseFloat(history.variants[variant.id].fitness)+')'}"></div>
-        <div v-if="variant.is_copied==true && [successful_build_variant_information[genNum+1].filter((v) => v.is_copied == false).map(function(v) { return history.variants[v.id].operation.parentIds }).flat(), successful_build_variant_information[genNum+1].filter((v) => v.is_copied == true).map(function(v) { return v.id })].flat().includes(variant.id)" @click="select(variant.id)" class="mini-line center-block" :style="{width: Math.round(node_size)+1+'px', height: Math.round(node_size)*0.3+'px'}"></div>
+      <div
+          v-for="variant in variants"
+          :style="'min-width: '+Math.round(node_size)*2+'px; height: '+Math.round(node_size)+'px; background-color: white;'"
+      >
+        <div
+            v-if="variant.is_copied==false"
+            @click="select(variant.id)"
+            class="circle center-block"
+            :style="
+            {
+              width: Math.round(node_size)+'px',
+              height: Math.round(node_size)+'px',
+              background: 'rgba(0,255,0,'+parseFloat(history.variants[variant.id].fitness)+')'
+            }"
+            :class="
+            {
+              'selected-circle':variant.id===selected_variant_id,
+              'parent-circle':variant.id!==selected_variant_id && parent_variant_ids.includes(variant.id)
+            }"
+        ></div>
+        <div
+            v-if="variant.is_copied==true"
+            @click="select(variant.id)"
+            class="mini-line center-block"
+            :style="{
+              width: Math.round(node_size)+1+'px', height: Math.round(node_size)*0.3+'px'
+            }"></div>
+        <div
+            v-if="variant.is_copied==true"
+            @click="select(variant.id)"
+            class="mini-circle center-block"
+            :style="{
+              width: Math.round(node_size)/5*2+'px',
+              height: Math.round(node_size)/5*2+'px',
+              background: 'rgba(0,255,0,'+parseFloat(history.variants[variant.id].fitness)+')'
+            }"></div>
+        <div
+            v-if="variant.is_copied==true && [successful_build_variant_information[genNum+1].filter((v) => v.is_copied == false).map(function(v) { return history.variants[v.id].operation.parentIds }).flat(), successful_build_variant_information[genNum+1].filter((v) => v.is_copied == true).map(function(v) { return v.id })].flat().includes(variant.id)"
+            @click="select(variant.id)"
+            class="mini-line center-block"
+            :style="{
+              width: Math.round(node_size)+1+'px',
+              height: Math.round(node_size)*0.3+'px'
+            }"></div>
       </div>
-      <div v-if="failed_build_variant_information[genNum].length > 0" :style="'min-width: '+Math.round(node_size)*2+'px; height: '+Math.round(node_size)+'px; background-color: white;'">
-        <img src="@/assets/batsu.png" class="cross" :style="{width: Math.round(node_size)+'px', height: Math.round(node_size)+'px'}"><br>
+      <div
+          v-if="failed_build_variant_information[genNum].length > 0"
+          :style="'min-width: '+Math.round(node_size)*2+'px; height: '+Math.round(node_size)+'px; background-color: white;'"
+      >
+        <img src="@/assets/batsu.png"
+             class="cross"
+             :style="
+             {
+               width: Math.round(node_size)+'px',
+               height: Math.round(node_size)+'px'
+             }"
+        >
+        <br>
         <p>{{failed_build_variant_information[genNum].length}}</p>
       </div>
     </div>
@@ -60,7 +179,6 @@ export default {
         this.parent_variant_ids.push(x);
         ids = this.history.variants[x].operation.parentIds;
         ids.forEach(function( id ) {
-          // console.log( id );
           stack.push(id);
         });
       }
@@ -117,11 +235,10 @@ export default {
           if(!this.successful_build_variant_information[i][j].is_copied && this.successful_build_variant_information[i][j].operation_name !== 'random-crossover' && i != 0) {
             let variant = this.history.variants[this.successful_build_variant_information[i][j].id];
             let parent_variant = this.history.variants[variant.operation.parentIds[0]];
-            var suspicious_values = this.calc_suspiciousness_values(parent_variant);
-            var max_suspicious_value = 0.0;
+            const suspicious_values = this.calc_suspiciousness_values(parent_variant);
+            let max_suspicious_value = 0.0;
             for(let k=variant.operation.appendBase.lineNumberRange.start;k<=variant.operation.appendBase.lineNumberRange.end;k++) {
               max_suspicious_value = max_suspicious_value < suspicious_values[k] ? suspicious_values[k] : max_suspicious_value;
-              // console.log(String(variant.id)+': '+String(k) +','+String(suspicious_values[k]));
             }
             this.successful_build_variant_information[i][j]['max_suspicious_value'] = max_suspicious_value;
           }
@@ -142,7 +259,6 @@ export default {
   },
   watch: {
     history: function(newVal, oldVal) {
-      // console.log(newVal, oldVal);
       this.divide_variants();
     }
   }
