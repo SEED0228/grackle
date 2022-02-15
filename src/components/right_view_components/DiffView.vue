@@ -1,5 +1,5 @@
 <template>
-  <template v-if="selected_variant && selected_variant.patch.slice(-1)[0].diff !== null">
+  <template v-if="selected_variant.id !== 0 ? selected_variant.patch.slice(-1)[0].diff : null !== null">
     <div class="code_width" v-html="prettyHtml"></div>
   </template>
   <template v-else>
