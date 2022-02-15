@@ -53,7 +53,7 @@
                 :x2="Math.round(node_size)+variant.index*Math.round(node_size)*2"
                 :y2="Math.round(node_size)*3"
                 stroke="red"
-                :opacity="variant.max_suspicious_value**3"
+                :opacity="variant.max_suspicious_value**2"
             />
             <line
                 v-else-if="show_suspicious && variant.operation_name === 'random-crossover'"

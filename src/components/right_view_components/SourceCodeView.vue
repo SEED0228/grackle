@@ -10,7 +10,7 @@
             v-for="(code_line, index) in sourceCode.split('\n')" class="line" :class="'L'+(index+1)"
             :style="
             {
-              background: 'rgba('+255+',0,0,'+suspiciousness_values[index+1]**3*0.8+')'
+              background: 'rgba('+255+',0,0,'+suspiciousness_values[index+1]**2+')'
             }"
         >{{code_line}}</li>
       </ol>
@@ -77,7 +77,7 @@ export default {
 }
 
 .code_width {
-  height: 35vh;
+  height: 60vh;
 }
 
 #diff {
