@@ -16,11 +16,13 @@ export default {
   props: ["selected_variant"],
   computed: {
     prettyHtml() {
-      const last_patch = this.selected_variant.patch.slice(-1)[0];
-      let diffs = last_patch.diff.slice(1,-1).split(',')[0] + "\n"
-      diffs += last_patch.diff.slice(1,-1).split(',')[1].slice(1) + "\n"
-      diffs += last_patch.diff.slice(1,-1).split(',').slice(2, 5).join().slice(1) + "\n"
-      diffs += last_patch.diff.slice(1,-1).split(',').slice(5).map(line => line.slice(1)).join("\n");
+      let diffs = "";
+      for(let patch of this.selected_variant.patch) {
+        diffs += patch.diff.slice(1,-1).split(',')[0] + "\n";
+        diffs += patch.diff.slice(1,-1).split(',')[1].slice(1) + "\n";
+        diffs += patch.diff.slice(1,-1).split(',').slice(2, 5).join().slice(1) + "\n";
+        diffs += patch.diff.slice(1,-1).split(',').slice(5).map(line => line.slice(1)).join("\n")+"\n";
+      }
       console.log(diffs);
       return Diff2Html.html(diffs, {
         drawFileList: false,

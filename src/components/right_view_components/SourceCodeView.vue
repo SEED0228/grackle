@@ -77,7 +77,7 @@ export default {
 }
 
 .code_width {
-  height: 60vh;
+  height: 50vh;
 }
 
 #diff {
