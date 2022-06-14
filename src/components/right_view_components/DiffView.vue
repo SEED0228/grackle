@@ -18,12 +18,12 @@ export default {
     prettyHtml() {
       let diffs = "";
       for(let patch of this.selected_variant.patch) {
-        diffs += patch.diff.slice(1,-1).split(',')[0] + "\n";
-        diffs += patch.diff.slice(1,-1).split(',')[1].slice(1) + "\n";
-        diffs += patch.diff.slice(1,-1).split(',').slice(2, 5).join().slice(1) + "\n";
-        diffs += patch.diff.slice(1,-1).split(',').slice(5).map(line => line.slice(1)).join("\n")+"\n";
+        let fixed_diff = patch.diff.replace(/@@ -(\d+),(\d+) \+(\d+),(\d+) @@/g, '@@ -$1, $2 +$3, $4 @@')
+        diffs += fixed_diff.slice(1,-1).split(',')[0] + "\n";
+        diffs += fixed_diff.slice(1,-1).split(',')[1].slice(1) + "\n";
+        diffs += fixed_diff.slice(1,-1).split(',').slice(2).map(line => line.slice(1)).join("\n")+"\n";
       }
-      console.log(diffs);
+      diffs = diffs.replace(/@@ -(\d+)\n(\d+) \+(\d+)\n(\d+) @@/g, '@@ -$1,$2 +$3,$4 @@');
       return Diff2Html.html(diffs, {
         drawFileList: false,
         matching: 'lines',
